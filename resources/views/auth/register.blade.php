@@ -66,7 +66,7 @@
                             <label for="national-id" class="col-md-4 control-label">National ID</label>
 
                             <div class="col-md-6">
-                                <input id="national-id" type="text" class="form-control" name="nationality-id" value="{{ old('national-id') }}" required>
+                                <input id="national-id" type="text" class="form-control" name="national-id" value="{{ old('national-id') }}" required>
 
                                 @if ($errors->has('national-id'))
                                     <span class="help-block">
