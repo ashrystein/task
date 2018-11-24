@@ -61,6 +61,22 @@
                             </div>
                         </div>
 
+
+                         <div class="form-group{{ $errors->has('national-id') ? ' has-error' : '' }}">
+                            <label for="national-id" class="col-md-4 control-label">National ID</label>
+
+                            <div class="col-md-6">
+                                <input id="national-id" type="text" class="form-control" name="nationality-id" value="{{ old('national-id') }}" required>
+
+                                @if ($errors->has('national-id'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('national-id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        
+
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
