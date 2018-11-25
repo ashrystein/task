@@ -29,4 +29,15 @@ class SocialPostsController extends Controller
   $res = DB::table('social_posts')->get();
   return view('home',compact('res'));  
   }
+
+  public function delete($data)
+  {
+    
+    DB::table('social_posts')->where('id', '=', $data )->delete();
+    echo $data;
+  $res = DB::table('social_posts')->get();
+  return view('home',compact('res'));  
+  }
+
+
 }

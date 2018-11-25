@@ -44,6 +44,10 @@
                             <div class="info">
                                 <h2 class="title">{{$post->title}}</h2>
                                 <p class="desc">{{$post->body}}</p>
+                                <ul>
+								    <li style="width:50%;"><a href="#website"> edit </a></li>
+                                    <li style="width:50%;"><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
+							    </ul>
                             </div>
                         </li>
                     </ul>
