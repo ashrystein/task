@@ -21,3 +21,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');
+
+Route::get('/createPost', 'SocialPostsController@redirect');
+Route::get('/createPostCallback', 'SocialPostsController@callback');
