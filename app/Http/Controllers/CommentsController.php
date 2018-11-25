@@ -8,25 +8,15 @@ use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
-{
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+class CommentsController extends Controller
+{
+    public function addComment (Request $request , $data){
+        $comment = $request->input('comment');
+        $data = array(
+            array('Ptitle'=> $data,'comment'=> $comment)
+        );
+        DB::table('commentsTable')->insert($data);
         $res = DB::table('social_posts')->get();
         $coms = DB::table('commentsTable')->get(); 
         $data =['res'=> $res , 'coms' => $coms];

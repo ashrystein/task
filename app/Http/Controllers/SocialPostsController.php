@@ -32,9 +32,9 @@ class SocialPostsController extends Controller
 
   public function delete($data)
   {
-    
+   
     DB::table('social_posts')->where('id', '=', $data )->delete();
-    echo $data;
+    //echo $data;
   $res = DB::table('social_posts')->get();
   return view('home',compact('res'));  
   }

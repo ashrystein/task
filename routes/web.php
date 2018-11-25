@@ -24,3 +24,5 @@ Route::get('/callback', 'SocialAuthFacebookController@callback');
 
 Route::get('/createPost', 'SocialPostsController@redirect');
 Route::get('/deletePost/{data}', 'SocialPostsController@delete')->name('deletePost');
+
+Route::get('/createcomment/{data}', 'CommentsController@addComment')->name('comment');

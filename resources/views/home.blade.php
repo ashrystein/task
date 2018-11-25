@@ -1,8 +1,59 @@
+
 <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}" >
+
+<script type="text/javascript">        
+        $(document).ready(function() {
+            $(".delbutton").click(function() {
+                alert("ghfghch");
+                var id = $(this).attr("id");
+                if (confirm("Sure you want to delete this post? This cannot be undone later.")) {
+                    $.ajax({
+                        type : "get",
+                        url : "/deletePost", //URL to the delete php script
+                        data : ({
+                            id:id
+                        }),
+                        success : function() {
+                        }
+                    });
+                    $(this).parents(".record").animate("fast").animate({
+                        opacity : "hide"
+                    }, "slow");
+                }
+                return false;
+            });
+        });
+ </script>
 
 @extends('layouts.app')
 
 @section('content')
+<script type="text/javascript">        
+
+        $(document).ready(function() {
+            $(".delbutton").click(function() {
+                alert("ghfghch");
+                var id = $(this).attr("id");
+                if (confirm("Sure you want to delete this post? This cannot be undone later.")) {
+                    $.ajax({
+                        type : "get",
+                        url : "/deletePost", //URL to the delete php script
+                        data : ({
+                            id:id
+                        }),
+                        success : function() {
+                        }
+                    });
+                    $(this).parents(".record").animate("fast").animate({
+                        opacity : "hide"
+                    }, "slow");
+                }
+                return false;
+            });
+        });
+
+ </script>
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -34,8 +85,8 @@
     </form>
 
 </div>
-    @if ($res)
-        @foreach($res as $post)
+    @if ($data['res'])
+        @foreach($data['res'] as $post)
         <div class="container">
 		    <div class="row">
 			    <div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]">
@@ -45,12 +96,24 @@
                                 <h2 class="title">{{$post->title}}</h2>
                                 <p class="desc">{{$post->body}}</p>
                                 <ul>
-								    <li style="width:50%;"><a href="#website"> edit </a></li>
-                                    <li style="width:50%;"><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
+								    <li ><a href=""> edit </a></li>
+                                    <li ><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
 							    </ul>
+                                <form class="form-horizontal" method="get" action="{!! route('comment', ['data'=>$post->title]) !!}">
+                                    <textarea class="form-control" name = "comment" rows="1" placeholder="Comment"></textarea>
+                                    <li ><button type="submit"> comment </button></li>
+                                    <br>
+                                </form>
                             </div>
                         </li>
                     </ul>
+                    @if ($data['coms'])
+                        @foreach($data['coms'] as $comment)
+                            @if ($comment->Ptitle == $post->title)
+                                <h5 class="title">{{$comment->comment}}</h5>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>                         
