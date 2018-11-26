@@ -27,7 +27,10 @@ class SocialPostsController extends Controller
   DB::table('social_posts')->insert($data);
   
   $res = DB::table('social_posts')->get();
-  return view('home',compact('res'));  
+    $coms = DB::table('commentsTable')->get(); 
+    $data =['res'=> $res , 'coms' => $coms];
+    //echo $data['coms'];
+    return view('home',compact('data'));  
   }
 
   public function delete($data)
@@ -35,8 +38,11 @@ class SocialPostsController extends Controller
    
     DB::table('social_posts')->where('id', '=', $data )->delete();
     //echo $data;
-  $res = DB::table('social_posts')->get();
-  return view('home',compact('res'));  
+    $res = DB::table('social_posts')->get();
+    $coms = DB::table('commentsTable')->get(); 
+    $data =['res'=> $res , 'coms' => $coms];
+    //echo $data['coms'];
+    return view('home',compact('data'));  
   }
 
 
