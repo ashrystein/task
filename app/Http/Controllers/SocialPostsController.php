@@ -30,6 +30,18 @@ class SocialPostsController extends Controller
     DB::table('social_posts')->insert($data);
     return $this->update($gen);  
   }
+  
+  public function edit(Request $request , $data)
+  {
+    $user = \Auth::user();
+    $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
+    
+    $title = $request->input('edittitle');
+    $body = $request->input('editbody');
+    DB::table('social_posts')->where('id', '=', $data)->update(['title' => $title , 'body' => $body]);
+
+    return $this->update($gen);  
+  }
 
   public function update($param = null){
     $res = DB::table('social_posts')->where('gender', '=', $param)->get();

@@ -1,7 +1,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}" >
 
-<script type="text/javascript">        
+<script type="text/javascript">
         $(document).ready(function() {
             $(".delbutton").click(function() {
                 alert("ghfghch");
@@ -23,11 +23,21 @@
                 return false;
             });
         });
+        
+        
+        function edit(boo) {
+            //var bool = document.getElementById("editbtn").name;
+            //alert(bool)
+            if(boo == 1)
+                document.getElementById("editform").style.display="none";
+            else
+                document.getElementById("editform").style.display="block";
+                //document.getElementById("br1").style.display="none";    
+        }
  </script>
-
 @extends('layouts.app')
-
 @section('content')
+<body >
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -81,8 +91,8 @@
                                 <h2 class="title">{{$post->title}}</h2>
                                 <p class="desc">{{$post->body}}</p>
                                 <ul>
-								    <li ><a href=""> edit </a></li>
-                                    <li ><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
+								    <li width='50%'><a id="editbtn" name="<?php echo $post->id ?>" onclick="edit(2)"> edit </a></li>
+                                    <li width='50%'><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
 							    </ul>
                                 <form class="form-horizontal" method="get" action="{!! route('comment', ['data'=>$post->title]) !!}">
                                     <textarea class="form-control" name = "comment" rows="1" placeholder="Comment"></textarea>
@@ -90,7 +100,13 @@
                                     <br>
                                 </form>
                             </div>
+                            <form class="form-horizontal" method="get" action="{!! route('editPost', ['data'=>$post->id]) !!}" id="editform">
+                                    <textarea class="form-control" name = "edittitle" rows="1" placeholder="new title"></textarea>
+                                    <textarea class="form-control" name = "editbody" rows="3" placeholder="new body"></textarea>
+                                    <li ><button type="submit"> edit </button></li>
+                            </form>
                         </li>
+                        <br id="br1"><br id="br1"><br id="br1"><br id="br1"><br id="br1"><br id="br1">
                     </ul>
                     @if ($data['coms'])
                         @foreach($data['coms'] as $comment)
@@ -105,4 +121,5 @@
         @endforeach
     @endif
     @endif
+</body>    
 @endsection
