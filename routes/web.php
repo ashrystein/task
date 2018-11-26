@@ -26,3 +26,4 @@ Route::get('/createPost', 'SocialPostsController@redirect');
 Route::get('/deletePost/{data}', 'SocialPostsController@delete')->name('deletePost');
 
 Route::get('/createcomment/{data}', 'CommentsController@addComment')->name('comment');
+Route::get('/updateGender', 'HomeController@updateGender');

@@ -28,43 +28,12 @@
 @extends('layouts.app')
 
 @section('content')
-<script type="text/javascript">        
-
-        $(document).ready(function() {
-            $(".delbutton").click(function() {
-                alert("ghfghch");
-                var id = $(this).attr("id");
-                if (confirm("Sure you want to delete this post? This cannot be undone later.")) {
-                    $.ajax({
-                        type : "get",
-                        url : "/deletePost", //URL to the delete php script
-                        data : ({
-                            id:id
-                        }),
-                        success : function() {
-                        }
-                    });
-                    $(this).parents(".record").animate("fast").animate({
-                        opacity : "hide"
-                    }, "slow");
-                }
-                return false;
-            });
-        });
-
- </script>
-
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <form>
-                        Select Gender:
-                        <label><input type="radio" name="gender" value="male" required>Male</label>
-                        <label><input type="radio" name="gender" value="female">Female</label>
-                        <input type="submit">
-                    </form>
+                    DashBoard
                 </div>
 
                 <div class="panel-body">
@@ -79,6 +48,15 @@
             </div>
         </div>
     </div>
+
+    @if ($data['gen'] == 'unknown')
+    <form class="form-horizontal" method="get" action="/updateGender">
+        Select Gender:
+        <label><input type="radio" name="gender" value="male" required>Male</label>
+        <label><input type="radio" name="gender" value="female">Female</label>
+        <input type="submit">
+    </form>
+    @else
     <form class="form-horizontal" method="get" action="/createPost">
         <div class="col-md-8 col-md-offset-2">
                 <textarea class="form-control" name = "title" rows="1" placeholder="Title" required></textarea>
@@ -125,5 +103,6 @@
             </div>
         </div>                         
         @endforeach
+    @endif
     @endif
 @endsection

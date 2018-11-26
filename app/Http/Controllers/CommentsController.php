@@ -17,10 +17,13 @@ class CommentsController extends Controller
             array('Ptitle'=> $data,'comment'=> $comment)
         );
         DB::table('commentsTable')->insert($data);
-        $res = DB::table('social_posts')->get();
+
+        $user = \Auth::user();
+        $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
+
+        $res = DB::table('social_posts')->where('gender', '=', $gen)->get();
         $coms = DB::table('commentsTable')->get(); 
-        $data =['res'=> $res , 'coms' => $coms];
-        //echo $data['coms'];
+        $data =['res'=> $res , 'coms' => $coms , 'gen'=> $gen];
         return view('home',compact('data'));
     }
 }

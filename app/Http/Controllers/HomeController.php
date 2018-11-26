@@ -25,12 +25,24 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $res = DB::table('social_posts')->get();
+        $user = \Auth::user();
+        $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
+        //echo $gen;
+        return $this->update($gen);
+    }
+    public function update($param = null){
+        $res = DB::table('social_posts')->where('gender', '=', $param)->get();
         $coms = DB::table('commentsTable')->get(); 
-        $data =['res'=> $res , 'coms' => $coms];
-        //echo $data['coms'];
+        $data =['res'=> $res , 'coms' => $coms , 'gen'=> $param];
         return view('home',compact('data'));
+    }
+    public function  updateGender(Request $request){
+         $gender = $request->gender;
+         DB::table('users')->where('remember_token', '=', $request->input('TOKEN'))->update(['gen' => $gender]);
+         return $this->update($gender);
+         //echo $request;
+
     }
 }
