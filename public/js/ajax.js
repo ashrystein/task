@@ -3,7 +3,7 @@
             $(".delete").click(function(){    
             var del_id = $(this).attr('id');
             var remove = '.'+String(del_id);
-            alert(del_id)
+            //alert(del_id)
                 $.ajax({
                     type:'get',
                     url:'/deletePost/'+del_id,
