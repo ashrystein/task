@@ -11,19 +11,16 @@ use App\Http\Controllers\Controller;
 
 class CommentsController extends Controller
 {
-    public function addComment (Request $request , $data){
-        $comment = $request->input('comment');
+    public function addComment (Request $request){
+        $comment = $_GET['c'];
+        $ptitle = $_GET['p'];
+        
         $data = array(
-            array('Ptitle'=> $data,'comment'=> $comment)
+            array('Ptitle'=> $ptitle,'comment'=> $comment)
         );
-        DB::table('commentsTable')->insert($data);
-
-        $user = \Auth::user();
-        $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
-
-        $res = DB::table('social_posts')->where('gender', '=', $gen)->get();
-        $coms = DB::table('commentsTable')->get(); 
-        $data =['res'=> $res , 'coms' => $coms , 'gen'=> $gen];
-        return view('home',compact('data'));
+        if($comment !== "" && $ptitle!=""){
+            DB::table('commentsTable')->insert($data);
+        }
+        return response()->json(array('p'=>$ptitle , 'c' =>$comment), 200);
     }
 }

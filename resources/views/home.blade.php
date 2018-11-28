@@ -1,43 +1,91 @@
+<html>
+<head>
 
-<link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}" >
-
-<script type="text/javascript">
-        $(document).ready(function() {
-            $(".delbutton").click(function() {
-                alert("ghfghch");
-                var id = $(this).attr("id");
-                if (confirm("Sure you want to delete this post? This cannot be undone later.")) {
-                    $.ajax({
-                        type : "get",
-                        url : "/deletePost", //URL to the delete php script
-                        data : ({
-                            id:id
-                        }),
-                        success : function() {
-                        }
-                    });
-                    $(this).parents(".record").animate("fast").animate({
-                        opacity : "hide"
-                    }, "slow");
-                }
-                return false;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ 
+<script>
+        $(document).ready(function(){
+            $(".delete").click(function(){    
+            var del_id = $(this).attr('id');
+            var remove = '.'+String(del_id);
+            alert(del_id)
+                $.ajax({
+                    type:'get',
+                    url:'/deletePost/'+del_id,
+                    data: { id : del_id},
+                    success:function(data) {
+                                //alert(data.msg)
+                                $(remove).remove();
+                            },
+                    error: function (xmlhttp, ajaxOptions, thrownError) {
+                                alert(xmlhttp.status);
+                                alert(thrownError);
+                            }
+                });    
             });
         });
-        
-        
-        function edit(boo) {
-            //var bool = document.getElementById("editbtn").name;
-            //alert(bool)
-            if(boo == 1)
-                document.getElementById("editform").style.display="none";
-            else
-                document.getElementById("editform").style.display="block";
-                //document.getElementById("br1").style.display="none";    
-        }
+
+        $(document).ready(function(){
+            $(".formComment").click(function(){    
+            var ptitle = $(this).attr('name');
+            var pid = $(this).attr('id');
+            var comment = $(this).children('textarea').val();
+            var addc = '.'+String(pid);
+                $.ajax({
+                    type:'get',
+                    url:'/createcomment',
+                    data: {p : ptitle, c : comment},
+                    success:function(p , c) {
+                                //alert(addc)
+                                $(".formComment").submit(function(e){
+                                    e.preventDefault();
+                                });
+                                var txt = $("<h5></h5>").text(comment);
+                                if(p && c){
+                                    $(addc).append(txt);
+                                }
+                            },
+                    error: function (xmlhttp, ajaxOptions, thrownError) {
+                                alert(xmlhttp.status);
+                                alert(thrownError);
+                            }
+                });    
+            });
+        });
+
+        $(document).ready(function(){
+            $(".formEditPost").click(function(){    
+            var ptitle = $(this).find('textarea[name="edittitle"]').val();
+            var pbody = $(this).find('textarea[name="editbody"]').val();
+            var pid = $(this).attr('id');
+            var update = '.'+String(pid);
+                $.ajax({
+                    type:'get',
+                    url:'/editPost',
+                    data: {p : ptitle, b : pbody , id:pid},
+                    success:function(res) {
+                                //alert(res.res)
+                                
+                                /*$(".formEditPost").submit(function(e){
+                                    e.preventDefault();
+                                });
+                                var up = (update).find('div[name="info"]'); 
+                                alert("up");*/
+                            },
+                    error: function (xmlhttp, ajaxOptions, thrownError) {
+                                alert(xmlhttp.status);
+                                alert(thrownError);
+                            }
+                });    
+            });
+        });
+
  </script>
+ <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}" >
+ </head>
+ <body >
 @extends('layouts.app')
 @section('content')
-<body >
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -86,21 +134,20 @@
 		    <div class="row">
 			    <div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]">
 				    <ul class="event-list">
-					    <li>
-                            <div class="info">
-                                <h2 class="title">{{$post->title}}</h2>
-                                <p class="desc">{{$post->body}}</p>
+					    <li class="<?php echo $post->id; ?>">
+                            <div class="info" name="info">
+                                <h2 class="title" name="tit">{{$post->title}}</h2>
+                                <p class="desc" name="desc">{{$post->body}}</p>
                                 <ul>
-								    <li width='50%'><a id="editbtn" name="<?php echo $post->id ?>" onclick="edit(2)"> edit </a></li>
-                                    <li width='50%'><a href="{!! route('deletePost', ['data'=>$post->id]) !!}"> delete </a></li>
+                                    <li width='50%'><button  class="delete" id="<?php echo $post->id; ?>"> delete </button></li>
 							    </ul>
-                                <form class="form-horizontal" method="get" action="{!! route('comment', ['data'=>$post->title]) !!}">
-                                    <textarea class="form-control" name = "comment" rows="1" placeholder="Comment"></textarea>
-                                    <li ><button type="submit"> comment </button></li>
+                                <form class="formComment" name="<?php echo $post->title ; ?>" id="<?php echo $post->id ; ?>" action="#">
+                                    <textarea class="form-control" name = "com" rows="1" placeholder="Comment"></textarea>
+                                    <li ><input type="submit" class="comment" > comment </input></li>
                                     <br>
                                 </form>
                             </div>
-                            <form class="form-horizontal" method="get" action="{!! route('editPost', ['data'=>$post->id]) !!}" id="editform">
+                            <form class="formEditPost"  id="<?php echo $post->id ; ?>">
                                     <textarea class="form-control" name = "edittitle" rows="1" placeholder="new title"></textarea>
                                     <textarea class="form-control" name = "editbody" rows="3" placeholder="new body"></textarea>
                                     <li ><button type="submit"> edit </button></li>
@@ -109,17 +156,20 @@
                         <br id="br1"><br id="br1"><br id="br1"><br id="br1"><br id="br1"><br id="br1">
                     </ul>
                     @if ($data['coms'])
+                        <div class="<?php echo $post->id; ?>">
                         @foreach($data['coms'] as $comment)
                             @if ($comment->Ptitle == $post->title)
-                                <h5 class="title">{{$comment->comment}}</h5>
+                                <h5>{{$comment->comment}}</h5>
                             @endif
                         @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
         </div>                         
         @endforeach
     @endif
-    @endif
-</body>    
+    @endif    
 @endsection
+</body>
+</html>

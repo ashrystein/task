@@ -23,9 +23,9 @@ Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');
 
 Route::get('/createPost', 'SocialPostsController@redirect');
-Route::get('/deletePost/{data}', 'SocialPostsController@delete')->name('deletePost');
-Route::get('/editPost/{data}', 'SocialPostsController@edit')->name('editPost');
+Route::get('/deletePost/{id}', 'SocialPostsController@delete')->name('deletePost');
+Route::get('/editPost', 'SocialPostsController@edit')->name('editPost');
 
 
-Route::get('/createcomment/{data}', 'CommentsController@addComment')->name('comment');
+Route::get('/createcomment', 'CommentsController@addComment')->name('createcomment');
 Route::get('/updateGender', 'HomeController@updateGender');

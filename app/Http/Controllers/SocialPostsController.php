@@ -31,8 +31,16 @@ class SocialPostsController extends Controller
     return $this->update($gen);  
   }
   
-  public function edit(Request $request , $data)
+  public function edit(Request $request)
   {
+        $body = $_GET['b'];
+        $title = $_GET['p'];
+        $pid = $_GET['id'];
+        if($body !=="" && $title!==""){
+          DB::table('social_posts')->where('id', '=', $pid)->update(['title' => $title , 'body' => $body]);
+        }
+        return response()->json(array('res'=>'ok'), 200);
+    /*
     $user = \Auth::user();
     $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
     
@@ -41,6 +49,7 @@ class SocialPostsController extends Controller
     DB::table('social_posts')->where('id', '=', $data)->update(['title' => $title , 'body' => $body]);
 
     return $this->update($gen);  
+    */
   }
 
   public function update($param = null){
@@ -50,15 +59,13 @@ class SocialPostsController extends Controller
     return view('home',compact('data'));
   }
 
-  public function delete($data)
+  public function delete(Request $request , $id)
   {
-   
-    DB::table('social_posts')->where('id', '=', $data )->delete();
-    
-    $user = \Auth::user();
-    $gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
-    
-    return $this->update($gen);  
+    DB::table('social_posts')->where('id', '=', $id )->delete();
+    return response()->json(array('msg'=> "ok"), 200);
+    //$user = \Auth::user();
+    //$gen = DB::table('users')->where('id', '=', $user->id)->value('gen');
+    //return $this->update($gen);  
   }
 
 
